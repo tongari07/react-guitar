@@ -4,7 +4,7 @@ import { useRef, Fragment, useMemo, ReactElement, useState } from 'react'
 import useLayoutEffect from './hooks/layoutEffect'
 import range from 'lodash.range'
 import uniqueId from 'lodash.uniqueid'
-import { set } from './util/arrays'
+import { setStringArray } from './util/arrays'
 import classNames from 'classnames'
 import { get, fromMidiSharps } from '@tonaljs/note'
 import { fromSemitones } from '@tonaljs/interval'
@@ -55,12 +55,7 @@ function Frets(props: {
       onMouseEnter={props.onMouseEnter}
     >
       {props.currentFret !== undefined && (
-        <div
-          className="fret mute"
-          style={{ zIndex: props.currentFret === -1 ? 1 : undefined }}
-        >
-          {props.children?.(-1)}
-        </div>
+        <div className="fret mute">{props.children?.(-1)}</div>
       )}
       {range(from, from + amount + 1).map((fret) => (
         <div className={classNames('fret', { nut: fret === 0 })} key={fret}>
@@ -105,11 +100,10 @@ export default function Guitar(props: {
         `input[name="${id}-string-${string}"][value="${fret}"]`
       )
       ?.focus()
-  const releaseString = (string: number) =>
-    pressString(string, strings[string] === 0 ? -1 : 0)
+  const releaseString = (string: number) => pressString(string, -1)
   const pressString = (string: number, fret: number) => {
     focusString(string, fret)
-    props.onChange?.(set(strings, string, fret))
+    props.onChange?.(setStringArray(string, fret))
   }
   const getNavigationDelta = (e: KeyboardEvent) => {
     switch (getKey(e)) {
@@ -213,7 +207,7 @@ export default function Guitar(props: {
                     <span
                       className="actual-string"
                       style={{
-                        opacity: currentFret === -1 ? 0.2 : 1,
+                        opacity: 1,
                         borderBottom: `solid 0.2em ${color(
                           theme.string.color(string)
                         ).darken(0.35)}`,
@@ -228,7 +222,7 @@ export default function Guitar(props: {
                     value={fret}
                     checked={currentFret === fret}
                     onChange={(e) => {
-                      props.onChange?.(set(strings, string, fret))
+                      props.onChange?.(setStringArray(string, fret))
                       e.target.focus()
                     }}
                     onClick={() =>

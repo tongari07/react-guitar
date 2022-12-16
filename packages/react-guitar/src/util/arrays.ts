@@ -1,5 +1,5 @@
-export function set<T>(array: T[], pos: number, item: T): T[] {
-  const newArray = array.slice(0)
+export function setStringArray(pos: number, item: number): number[] {
+  const newArray = [-1, -1, -1, -1, -1, -1]
   newArray[pos] = item
   return newArray
 }

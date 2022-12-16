@@ -41,7 +41,7 @@ storiesOf('Guitar', module)
       'Scientific Pitch Notation': getRenderFingerSpn(standard),
       'Relative to Root': getRenderFingerRelative(standard, root),
     }
-    const [strings, setStrings] = useState([0, 0, 0, 0, 0, 0])
+    const [strings, setStrings] = useState([-1, -1, -1, -1, -1, -1])
     const { play } = useSound({ fretting: strings, tuning: standard })
     return (
       <Guitar
